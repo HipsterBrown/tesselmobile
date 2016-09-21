@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tessel To-Go!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      width: 100%;
+    }
+    li {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Get Your Motors Running!</h1>
+
+  <p>Use the controls below to drive the TesselMobile.</p>
+
+
+  <ul>
+    <li><button id="forward">Forward</button></li>
+    <li><button id="right">Right</button></li>
+    <li><button id="reverse">Reverse</button></li>
+    <li><button id="left">Left</button></li>
+    <li><button id="brake">Brake</button></li>
+  </ul>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    var forward = document.getElementById('forward');
+    var reverse = document.getElementById('reverse');
+    var brake = document.getElementById('brake');
+    var left = document.getElementById('left');
+    var right = document.getElementById('right');
+
+    forward.addEventListener('click', function () {
+      socket.emit('forward');
+    });
+
+    reverse.addEventListener('click', function () {
+      socket.emit('reverse');
+    });
+
+    brake.addEventListener('click', function () {
+      socket.emit('brake');
+    });
+
+    left.addEventListener('click', function () {
+      socket.emit('left');
+    });
+
+    right.addEventListener('click', function () {
+      socket.emit('right');
+    });
+  </script>
+</body>
+</html>
