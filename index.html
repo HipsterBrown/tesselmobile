@@ -5,54 +5,82 @@
   <title>Tessel To-Go!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
+      font-family: 'Helvetica', sans-serif;
+      padding: 1rem;
+      text-align: center;
       width: 100%;
     }
-    li {
-      margin-bottom: 2rem;
+    p {
+      margin-bottom: 1rem;
+    }
+    svg {
+      width: 95%;
+    }
+    g {
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>Get Your Motors Running!</h1>
+  <h2>Get Your Motors Running!</h2>
 
   <p>Use the controls below to drive the TesselMobile.</p>
 
-
-  <ul>
-    <li><button id="forward">Forward</button></li>
-    <li><button id="right">Right</button></li>
-    <li><button id="reverse">Reverse</button></li>
-    <li><button id="left">Left</button></li>
-    <li><button id="brake">Brake</button></li>
-  </ul>
+  <svg width="482px" height="482px" viewBox="0 0 482 482" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <title>Controls</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+      <g id="Controls" sketch:type="MSLayerGroup" fill="#282828">
+        <g id="forward" transform="translate(196.000000, 0.000000)" sketch:type="MSShapeGroup">
+          <rect id="Rectangle-1" x="24" y="65.7121951" width="41" height="120.287805"></rect>
+          <polygon id="Triangle-1" points="45 -1.13686838e-13 90 96.1463415 1.13686838e-13 96.1463415 "></polygon>
+        </g>
+        <g id="reverse" transform="translate(241.000000, 389.000000) rotate(-180.000000) translate(-241.000000, -389.000000) translate(196.000000, 296.000000)" sketch:type="MSShapeGroup">
+          <rect id="Rectangle-1" x="24" y="65.7121951" width="41" height="120.287805"></rect>
+          <polygon id="Triangle-1" points="45 -1.13686838e-13 90 96.1463415 1.13686838e-13 96.1463415 "></polygon>
+        </g>
+        <g id="right" transform="translate(389.000000, 242.000000) rotate(-270.000000) translate(-389.000000, -242.000000) translate(344.000000, 149.000000)" sketch:type="MSShapeGroup">
+          <rect id="Rectangle-1" x="24" y="65.7121951" width="41" height="120.287805"></rect>
+          <polygon id="Triangle-1" points="45 -1.13686838e-13 90 96.1463415 1.13686838e-13 96.1463415 "></polygon>
+        </g>
+        <g id="left" transform="translate(93.000000, 242.000000) rotate(-90.000000) translate(-93.000000, -242.000000) translate(48.000000, 149.000000)" sketch:type="MSShapeGroup">
+          <rect id="Rectangle-1" x="24" y="65.7121951" width="41" height="120.287805"></rect>
+          <polygon id="Triangle-1" points="45 -1.13686838e-13 90 96.1463415 1.13686838e-13 96.1463415 "></polygon>
+        </g>
+        <rect id="brake" sketch:type="MSShapeGroup" x="210" y="210" width="62" height="62"></rect>
+      </g>
+    </g>
+  </svg>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
-    var forward = document.getElementById('forward');
-    var reverse = document.getElementById('reverse');
-    var brake = document.getElementById('brake');
-    var left = document.getElementById('left');
-    var right = document.getElementById('right');
+    var controls = {
+      forward: document.getElementById('forward'),
+      reverse: document.getElementById('reverse'),
+      brake: document.getElementById('brake'),
+      left: document.getElementById('left'),
+      right: document.getElementById('right')
+    }
 
-    forward.addEventListener('click', function () {
-      socket.emit('forward');
-    });
+    Object.keys(controls).forEach(function (name) {
+      var control = controls[name];
+      var emit = function () { 
+        control.style.fill = (name === 'brake') ? 'red' : 'green';
+        socket.emit(name);
+      };
+      var brake = function () { 
+        control.style.fill = 'inherit';
+        socket.emit('brake');
+      };
 
-    reverse.addEventListener('click', function () {
-      socket.emit('reverse');
-    });
+      control.addEventListener('mousedown', emit);
+      control.addEventListener('touchstart', emit);
 
-    brake.addEventListener('click', function () {
-      socket.emit('brake');
-    });
-
-    left.addEventListener('click', function () {
-      socket.emit('left');
-    });
-
-    right.addEventListener('click', function () {
-      socket.emit('right');
+      control.addEventListener('mouseup', brake);
+      control.addEventListener('touchend', brake);
     });
   </script>
 </body>
