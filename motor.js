@@ -3,8 +3,6 @@ var tessel = require('tessel');
 var portA = tessel.port.A;
 var portB = tessel.port.B;
 
-tessel.pwmFrequency(50);
-
 var motorA = {
   dir: portA.pin[4],
   cdir: portA.pin[3],
@@ -16,6 +14,7 @@ var motorB = {
   pwm: portB.pwm[0]
 };
 
+// motor directions
 function forwards (motor) {
   motor.dir.write(1);
   motor.cdir.write(0);
@@ -36,21 +35,7 @@ function stop (motor) {
   motor.cdir.write(0);
 }
 
-var pwmLoop = setInterval(() => {
-  motorA.pwm.pwmDutyCycle(0.6);
-  motorB.pwm.pwmDutyCycle(0.6);
-}, 500);
-
-/*
-setTimeout(() => {
-  shortBrake(motorA);
-  shortBrake(motorB);
-  clearInterval(pwmLoop);
-  console.log('motors should stop');
-}, 1000);
-console.log('motors should be moving');
-*/
-
+// motor control functions
 function forwardMotors () {
   forwards(motorA);
   forwards(motorB);
@@ -80,6 +65,15 @@ function turnLeft () {
   forwards(motorA);
   reverse(motorB);
 }
+
+// set the frequency to 50, needed for motor control
+tessel.pwmFrequency(50);
+
+// start powering the motors
+var pwmLoop = setInterval(() => {
+  motorA.pwm.pwmDutyCycle(0.6);
+  motorB.pwm.pwmDutyCycle(0.6);
+}, 500);
 
 module.exports = {
   forward: forwardMotors,

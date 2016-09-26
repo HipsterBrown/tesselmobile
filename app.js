@@ -2,7 +2,6 @@ var fs = require('fs');
 var http = require('http');
 var path = require('path');
 
-var logPath = path.join('~', 'debug.log');
 var indexPath = path.join(__dirname, 'index.html');
 
 var tessel = require('tessel');
@@ -14,11 +13,6 @@ greenLight.off();
 redLight.off();
 
 var controls = require('./motor.js');
-
-process.on('uncaughtException', (error) => {
-  controls.stop();
-  fs.appendFileSync(logPath, `Caught exception: ${error}`);
-});
 
 var app = require('express')();
 var server = http.Server(app);
@@ -61,12 +55,11 @@ io.on('connection', function(socket){
 });
 
 ap.create({
-  ssid: 'TesselToGo',
+  ssid: 'TesselMobile',
   password: 'SuperSecret123'
 }, function (error, settings) {
   if (error) {
     redLight.on();
-    fs.appendFileSync(logPath, error);
     throw error;
   }
 
