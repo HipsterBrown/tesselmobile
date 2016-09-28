@@ -79,6 +79,8 @@ When the green and amber lights come on, look for the "TesselMobile" network on 
 
 Click around and watch your Tessel move!
 
+![final assembled car](images/finished-assembly.jpg)
+
 ## Moving Forward (pun intended)
 
 Check out the [Tessel Hardware API docs](https://tessel.gitbooks.io/t2-docs/content/Tutorials/Pulse_Width_Modulation.html) to learn more about pulse width modulation (pwm) and the other capabilites to continue adding features to your project, i.e. a slider to the app to control the speed of the car. 
