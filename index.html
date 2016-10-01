@@ -30,6 +30,8 @@
 
   <p>Use the controls below to drive the TesselMobile.</p>
 
+  <input type="range" id="speed" value="50" />
+
   <svg width="482px" height="482px" viewBox="0 0 482 482" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
     <title>Controls</title>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
@@ -63,7 +65,8 @@
       brake: document.getElementById('brake'),
       left: document.getElementById('left'),
       right: document.getElementById('right')
-    }
+    };
+    var speedControl = document.getElementById('speed');
 
     Object.keys(controls).forEach(function (name) {
       var control = controls[name];
@@ -81,6 +84,59 @@
 
       control.addEventListener('mouseup', brake);
       control.addEventListener('touchend', brake);
+    });
+
+    var controlsAreActive = false;
+    document.addEventListener('keydown', function (event) {
+      if (controlsAreActive) {
+        event.preventDefault();
+        return;
+      }
+
+      switch (event.keyCode) {
+        case 37:
+          event.preventDefault();
+          controls.left.style.fill = 'green';
+          socket.emit('left');
+          controlsAreActive = true;
+          break;
+        case 38:
+          event.preventDefault();
+          controls.forward.style.fill = 'green';
+          socket.emit('forward');
+          controlsAreActive = true;
+          break;
+        case 39:
+          event.preventDefault();
+          controls.right.style.fill = 'green';
+          socket.emit('right');
+          controlsAreActive = true;
+          break;
+        case 40:
+          event.preventDefault();
+          controls.reverse.style.fill = 'green';
+          socket.emit('reverse');
+          controlsAreActive = true;
+          break;
+      }
+    });
+
+    document.addEventListener('keyup', function (event) {
+      switch (event.keyCode) {
+        case 37:
+        case 38:
+        case 39:
+        case 40:
+          Object.keys(controls).forEach(function (name) { controls[name].style.fill = 'inherit'; });
+          socket.emit('brake');
+          controlsAreActive = false;
+          break;
+      }
+    });
+
+    speedControl.addEventListener('change', function () {
+      var speed = parseInt(this.value) / 100;
+      socket.emit('speed', speed);
     });
   </script>
 </body>

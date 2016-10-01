@@ -31,20 +31,16 @@ io.on('connection', function(socket){
   console.log('a user connected');
   blink(greenLight);
 
-  socket.on('forward', function () {
-    controls.forward();
-  });
+  socket.on('forward', controls.forward);
 
-  socket.on('reverse', function () {
-    controls.reverse();
-  });
+  socket.on('reverse', controls.reverse);
 
-  socket.on('brake', function () {
-    controls.brake();
-  });
+  socket.on('brake', controls.brake);
 
   socket.on('left', controls.left);
   socket.on('right', controls.right);
+
+  socket.on('speed', controls.setSpeed);
 
   socket.on('disconnect', function() {
     console.log('user disconnected');

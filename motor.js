@@ -66,14 +66,16 @@ function turnLeft () {
   reverse(motorB);
 }
 
+function setSpeed (speed) {
+  motorA.pwm.pwmDutyCycle(speed);
+  motorB.pwm.pwmDutyCycle(speed);
+}
+
 // set the frequency to 50, needed for motor control
 tessel.pwmFrequency(50);
 
 // start powering the motors
-var pwmLoop = setInterval(() => {
-  motorA.pwm.pwmDutyCycle(0.6);
-  motorB.pwm.pwmDutyCycle(0.6);
-}, 500);
+setSpeed(0.5);
 
 module.exports = {
   forward: forwardMotors,
@@ -81,5 +83,6 @@ module.exports = {
   brake: brakeMotors,
   stop: stopMotors,
   left: turnLeft,
-  right: turnRight
+  right: turnRight,
+  setSpeed: setSpeed
 }
